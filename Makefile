@@ -32,3 +32,9 @@ ruff-check:
 
 ruff-fix:
 	${DC} exec -T ${APP_SERVICE} ruff check . --fix
+
+tests:
+	${DC} exec -T ${APP_SERVICE} pytest . -vs
+
+tests-coverage:
+	${DC} exec ${APP_SERVICE} pytest --cov=. .
