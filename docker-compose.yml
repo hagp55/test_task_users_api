@@ -19,13 +19,15 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: users_api
-    command: uvicorn --host=0.0.0.0 --port=8000 --reload src.main:app
+    command: sh -c "alembic upgrade head && uvicorn --host=0.0.0.0 --port=8000 --reload src.main:app"
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:
       - ./:/code/
     env_file:
       - .env
+    environment:
+        POSTGRES_HOST: db
     restart: always
     depends_on:
       - db

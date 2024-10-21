@@ -40,7 +40,7 @@ python_version = "3.11"
 strict = true
 check_untyped_defs = true
 ignore_missing_imports = true
-
+disable_error_code = ["call-arg"]
 exclude = ["alembic"]
 
 
@@ -73,4 +73,5 @@ select = [
 ignore = [
     "B904",  # Allow raising exceptions without from e, for HTTPException
     "ARG001", # Unused function argument
+    "RET504", # Unnecessary assignment to `users` before `return` statement
 ]
