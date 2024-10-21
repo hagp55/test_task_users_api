@@ -33,6 +33,9 @@ ruff-check:
 ruff-fix:
 	${DC} exec -T ${APP_SERVICE} ruff check . --fix
 
+mypy:
+	${DC} exec -T ${APP_SERVICE} mypy --explicit-package-bases .
+
 tests:
 	${DC} exec -T ${APP_SERVICE} pytest . -vs
 
