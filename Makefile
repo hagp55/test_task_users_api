@@ -38,3 +38,9 @@ tests:
 
 tests-coverage:
 	${DC} exec ${APP_SERVICE} pytest --cov=. .
+
+migrate:
+	alembic upgrade head
+
+downgrade:
+	alembic downgrade -1
