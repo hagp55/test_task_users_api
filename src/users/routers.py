@@ -15,13 +15,13 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def get_user_statistics(
     db: Annotated[AsyncSession, Depends(get_db)],
     domain: Annotated[
-        str,
+        str | None,
         Query(
-            min_length=3,
             max_length=50,
             regex=r"^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            example="example.com",
         ),
-    ] = "example.com",
+    ] = None,
 ) -> UserStatistics:
     """
     Retrieves user statistics from the database.
