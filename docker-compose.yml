@@ -14,6 +14,16 @@ services:
         - pd_data:/var/lib/postgresql/data
       restart: on-failure
 
+  db_test:
+    image: postgres:17
+    container_name: users_db_test
+    environment:
+      - POSTGRES_DB=${POSTGRES_TEST_DB:-postgres_test}
+      - POSTGRES_USER=${POSTGRES_TEST_USER:-postgres_test}
+      - POSTGRES_PASSWORD=${POSTGRES_TEST_PASSWORD:-postgres_test}
+    ports:
+      - ${POSTGRES_TEST_PORT:-5433}:5432
+
   backend:
     build:
       context: .
@@ -28,6 +38,7 @@ services:
       - .env
     environment:
         POSTGRES_HOST: db
+        POSTGRES_TEST_HOST: db_test
     restart: always
     depends_on:
       - db
