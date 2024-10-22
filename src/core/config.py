@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     POSTGRES_TEST_PASSWORD: str
     POSTGRES_TEST_PORT: int
 
+    DEBUG: bool = False
+
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
         return (
