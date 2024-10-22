@@ -53,7 +53,7 @@ poetry run pytest -v
 | Route                               | Description
 |-------------------------------------|-------------------------------------------
 | `GET` /api/v1/users/statistics/     | get user statistics, optional <domain>
-| `GET` /api/v1/users/                | get all users, optional <skip, limit>
+| `GET` /api/v1/users/                | get all users, optional <page, size>
 | `POST` /api/v1/users/               | create user
 | `GET` /api/v1/users/{user_id}/      | get a specific user
 | `PUT` /api/v1/users/{user_id}/      | update a specific user
