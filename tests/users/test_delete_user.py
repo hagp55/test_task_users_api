@@ -1,7 +1,11 @@
 from httpx import AsyncClient
 
+from src.users.models import User
 
-async def test_successfully_delete_user(async_client: AsyncClient, create_list_users) -> None:
+
+async def test_successfully_delete_user(
+    async_client: AsyncClient, create_list_users: tuple[User, ...]
+) -> None:
     response = await async_client.get("/users/")
     assert len(response.json()) == 25
 

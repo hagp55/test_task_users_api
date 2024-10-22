@@ -1,5 +1,6 @@
 from httpx import AsyncClient
 
+from src.users.models import User
 from src.users.schemas import UserFromDB
 
 
@@ -11,7 +12,7 @@ async def test_users_empty_list(async_client: AsyncClient) -> None:
     assert len(json_response_data) == 0
 
 
-async def test_users_list(async_client: AsyncClient, create_list_users) -> None:
+async def test_users_list(async_client: AsyncClient, create_list_users: tuple[User, ...]) -> None:
     response = await async_client.get("/users/")
     json_response_data = response.json()
 
@@ -19,7 +20,7 @@ async def test_users_list(async_client: AsyncClient, create_list_users) -> None:
     assert len(json_response_data) == 25
 
 
-async def test_user_detail(async_client: AsyncClient, create_list_users) -> None:
+async def test_user_detail(async_client: AsyncClient, create_list_users: tuple[User, ...]) -> None:
     user = create_list_users[0]
     response = await async_client.get("/users/1/")
     json_response_data = UserFromDB.model_validate(response.json())

@@ -1,6 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
+from src.users.models import User
+
 
 @pytest.mark.parametrize(
     argnames="domain,count_users,ratio",
@@ -12,7 +14,11 @@ from httpx import AsyncClient
     ],
 )
 async def test_users_statistics(
-    async_client: AsyncClient, create_list_users, domain: str, count_users: int, ratio: float
+    async_client: AsyncClient,
+    create_list_users: tuple[User, ...],
+    domain: str,
+    count_users: int,
+    ratio: float,
 ) -> None:
     response = await async_client.get(f"/users/statistics/?domain={domain}")
     json_response_data = response.json()

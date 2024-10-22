@@ -15,7 +15,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def get_user_statistics(
     db: Annotated[AsyncSession, Depends(get_db)],
     domain: Annotated[
-        str | None,
+        str,
         Query(
             min_length=3,
             max_length=50,
