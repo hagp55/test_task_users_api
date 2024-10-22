@@ -36,11 +36,11 @@ ruff-fix:
 mypy:
 	${DC} exec -T ${APP_SERVICE} mypy --explicit-package-bases .
 
-tests:
-	${DC} exec -T ${APP_SERVICE} pytest . -vs
+test:
+	pytest . -vs
 
-tests-coverage:
-	${DC} exec ${APP_SERVICE} pytest --cov=. .
+test-coverage:
+	pytest --cov=. .
 
 migrate:
 	alembic upgrade head
