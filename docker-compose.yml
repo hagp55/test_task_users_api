@@ -17,12 +17,15 @@ services:
   db_test:
     image: postgres:17
     container_name: users_db_test
+    command: postgres -p 5433
     environment:
       - POSTGRES_DB=${POSTGRES_TEST_DB:-postgres_test}
       - POSTGRES_USER=${POSTGRES_TEST_USER:-postgres_test}
       - POSTGRES_PASSWORD=${POSTGRES_TEST_PASSWORD:-postgres_test}
+      - PGPORT=${POSTGRES_TEST_PORT:-5433}
     ports:
-      - ${POSTGRES_TEST_PORT:-5433}:5432
+      - ${POSTGRES_TEST_PORT:-5433}:5433
+
 
   backend:
     build:
