@@ -31,30 +31,31 @@ It provides basic CRUD (Create, Read, Update, Delete) operations for users.
 ### Config .env variables
 Use the `.env.example` as reference to create your configuration file `.env`
 
-### Use Poetry to install project dependencies:
-
-```bash
-poetry install
-```
-
 ### Run in Docker
 ```bash
 docker compose up
-
 ```
+
 ### Running Tests
 To run tests, run the following command
 ```bash
+docker compose exec -T backend pytest . -v
+```
+
+### Or use Poetry to install project dependencies and run tests:
+```bash
+poetry install
 poetry run pytest -v
 ```
+
 ## API Endpoints
 
 #### list routes of UsersAPI, and what are their expected request.
 | Route                               | Description
 |-------------------------------------|-------------------------------------------
 | `GET` /api/v1/users/statistics/     | get user statistics, optional <domain>
-| `GET` /api/v1/users/                | get all users, optional <page, size>
 | `POST` /api/v1/users/               | create user
+| `GET` /api/v1/users/                | get all users, optional <page, size>
 | `GET` /api/v1/users/{user_id}/      | get a specific user
 | `PUT` /api/v1/users/{user_id}/      | update a specific user
 | `DELETE` /api/v1/users/{user_id}/   | delete a specific user
