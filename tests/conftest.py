@@ -11,6 +11,7 @@ from src.core.db import BaseORM
 from src.deps import get_db
 from src.main import app
 from src.users.models import User
+from src.utils import get_random_lower_string
 
 engine_test = create_async_engine(
     settings.SQLALCHEMY_TEST_DATABASE_URI,
@@ -50,32 +51,32 @@ async def async_client() -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture(scope="function")
-async def create_list_users(async_client: AsyncClient):
+async def create_list_users(async_client: AsyncClient) -> tuple[User, ...]:
     user_list_register_today = [
         User(
-            username=f"user_first_group{n}",
-            email=f"user_first_group{n}@example.com",
+            username=get_random_lower_string(),
+            email=f"{get_random_lower_string()}@example.com",
             registration=datetime.now(),
         )
-        for n in range(13)
+        for _ in range(13)
     ]
 
     user_list_register_three_days_ago = [
         User(
-            username=f"user_second_group{n}",
-            email=f"user_second_group{n}@gmail.com",
+            username=get_random_lower_string(),
+            email=f"{get_random_lower_string()}@gmail.com",
             registration=datetime.now() - timedelta(days=3),
         )
-        for n in range(7)
+        for _ in range(7)
     ]
 
     user_list_register_more_than_seven_days_ago = [
         User(
-            username=f"user_third_group{n}",
-            email=f"user_third_group{n}@yandex.ru",
+            username=get_random_lower_string(),
+            email=f"{get_random_lower_string()}@yandex.ru",
             registration=datetime.now() - timedelta(days=10),
         )
-        for n in range(5)
+        for _ in range(5)
     ]
 
     async with async_session_maker() as session:
