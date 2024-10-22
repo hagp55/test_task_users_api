@@ -59,5 +59,5 @@ async def ratio_of_users_with_specific_domain(*, db: AsyncSession, domain: str |
             select(func.count(User.id)).where(User.email.like(f"%{domain}"))
         )
         if total_users_count and count_users_with_specific_domain:
-            return count_users_with_specific_domain / total_users_count
+            return round(count_users_with_specific_domain / total_users_count, 2)
     return 0.0

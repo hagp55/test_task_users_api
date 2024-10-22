@@ -69,19 +69,19 @@ async def get_user_by_email(*, db: AsyncSession, email: str) -> None:
         )
 
 
-async def get_users(*, db: AsyncSession, skip: int, limit: int) -> list[User]:
+async def get_users(*, db: AsyncSession, page: int, size: int) -> list[User]:
     """
-    Asynchronously retrieves a list of users from the database.
+    Asynchronously fetches a list of users from the database based on the page and size parameters.
 
     Args:
         db (AsyncSession): An asynchronous session for the database.
-        skip (int): The number of users to skip.
-        limit (int): The number of users to limit.
+        page (int): The page number to fetch.
+        size (int): The number of users to fetch per page.
 
     Returns:
-        list[User]: A list of User objects.
+        list[User]: A list of User objects for the specified page and size.
     """
-    users = await db.scalars(select(User).offset(skip).limit(limit))
+    users = await db.scalars(select(User).limit(size).offset((page - 1) * size))
     return list(users.all())
 
 

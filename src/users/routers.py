@@ -47,23 +47,21 @@ async def get_user_statistics(
 @router.get("/", response_model=list[UserFromDB], status_code=status.HTTP_200_OK)
 async def get_users(
     db: Annotated[AsyncSession, Depends(get_db)],
-    skip: Annotated[int, Query(ge=0, description="the number of users to skip")] = 0,
-    limit: Annotated[int, Query(ge=0, description="the number of users to show")] = 100,
+    page: Annotated[int, Query(ge=1, description="the number of page")] = 1,
+    size: Annotated[int, Query(ge=1, description="the number of users to show", example=25)] = 25,
 ) -> list[User]:
     """
-    Retrieves a list of users from the database.
+    Asynchronously fetches a list of users from the database based on the page and size parameters.
 
     Args:
-        db (Annotated[AsyncSession, Depends(get_db)]): The asynchronous database session.
-        skip (Annotated[int,
-            Query(ge=0, description="the number of users to skip")]): The number of users to skip.
-        limit (Annotated[int,
-            Query(ge=0, description="the number of users to show")]): The number of users to show.
+        db (AsyncSession): An asynchronous session for the database.
+        page (int): The page number to fetch.
+        size (int): The number of users to fetch per page.
 
     Returns:
-        list[User]: A list of User objects.
+        list[User]: A list of User objects for the specified page and size.
     """
-    users = await crud.get_users(db=db, skip=skip, limit=limit)
+    users = await crud.get_users(db=db, page=page, size=size)
     return users
 
 
