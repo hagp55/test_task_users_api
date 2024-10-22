@@ -14,7 +14,14 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.get("/statistics/", response_model=UserStatistics, status_code=status.HTTP_200_OK)
 async def get_user_statistics(
     db: Annotated[AsyncSession, Depends(get_db)],
-    domain: str = "example.com",
+    domain: Annotated[
+        str | None,
+        Query(
+            min_length=3,
+            max_length=50,
+            regex=r"^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+        ),
+    ] = "example.com",
 ) -> UserStatistics:
     user_statistics = UserStatistics(
         users_registered_seven_days_ago=await services.count_user_registered_last_seven_days(db=db),
