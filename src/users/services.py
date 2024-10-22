@@ -7,6 +7,16 @@ from src.users.models import User
 
 
 async def count_user_registered_last_seven_days(*, db: AsyncSession) -> int:
+    """
+    Asynchronously counts the number of users registered in the last seven days.
+
+    Args:
+        db (AsyncSession): An asynchronous session for the database.
+
+    Returns:
+        int: The number of users registered in the last seven days.
+        If no users were registered, returns 0.
+    """
     seven_days_ago = datetime.now() - timedelta(days=7)
     recent_users_count = await db.scalar(
         select(func.count(User.id)).where(User.registration >= seven_days_ago)
@@ -15,6 +25,15 @@ async def count_user_registered_last_seven_days(*, db: AsyncSession) -> int:
 
 
 async def top_five_users_with_longest_names(*, db: AsyncSession) -> list[str]:
+    """
+    Asynchronously retrieves the usernames of the top five users with the longest names.
+
+    Args:
+        db (AsyncSession): An asynchronous session for the database.
+
+    Returns:
+        list[str]: A list of usernames of the top five users with the longest names.
+    """
     users = await db.scalars(
         select(User).order_by(func.length(User.username).desc(), User.username).limit(5)
     )
@@ -23,7 +42,18 @@ async def top_five_users_with_longest_names(*, db: AsyncSession) -> list[str]:
 
 
 async def ratio_of_users_with_specific_domain(*, db: AsyncSession, domain: str) -> float:
-    domain = domain.split("@")[-1]
+    """
+    Asynchronously calculates the ratio of users with the specified domain in their email address.
+
+    Args:
+        db (AsyncSession): An asynchronous session for the database.
+        domain (str): The domain to filter users by.
+
+    Returns:
+        float: The ratio of users with the specified domain in their email address,
+        or 0.0 if no users were found.
+    """
+    domain = domain.split("@")[-1] if "@" in domain else domain
     if domain:
         total_users_count = await db.scalar(select(func.count(User.id)))
         count_users_with_specific_domain = await db.scalar(

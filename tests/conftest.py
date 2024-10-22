@@ -45,7 +45,7 @@ async def prepare_database() -> AsyncGenerator[None, None]:
 @pytest.fixture(scope="session")
 async def async_client() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://127.0.0.1:8000/api"
+        transport=ASGITransport(app=app), base_url="http://127.0.0.1:8000/api/v1"
     ) as async_client:
         yield async_client
 
