@@ -4,11 +4,26 @@ from fastapi import APIRouter, Depends, Path, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.deps import get_db
-from src.users import crud
+from src.users import crud, services
 from src.users.models import User
-from src.users.schemas import UserCreate, UserFromDB, UserUpdate
+from src.users.schemas import UserCreate, UserFromDB, UserStatistics, UserUpdate
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.get("/statistics/", response_model=UserStatistics, status_code=status.HTTP_200_OK)
+async def get_user_statistics(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    domain: str = "example.com",
+) -> UserStatistics:
+    user_statistics = UserStatistics(
+        users_registered_seven_days_ago=await services.count_user_registered_last_seven_days(db=db),
+        top_five_users_with_longest_names=await services.top_five_users_with_longest_names(db=db),
+        ratio_of_users_with_specific_domain=await services.ratio_of_users_with_specific_domain(
+            db=db, domain=domain
+        ),
+    )
+    return user_statistics
 
 
 @router.get("/", response_model=list[UserFromDB], status_code=status.HTTP_200_OK)
