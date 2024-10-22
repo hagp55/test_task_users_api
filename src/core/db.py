@@ -5,7 +5,7 @@ from src.core.config import settings
 
 engine = create_async_engine(
     url=settings.SQLALCHEMY_DATABASE_URI,
-    echo=True,
+    echo=settings.DEBUG,
 )
 
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession)
