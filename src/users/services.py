@@ -15,7 +15,9 @@ async def count_user_registered_last_seven_days(*, db: AsyncSession) -> int:
 
 
 async def top_five_users_with_longest_names(*, db: AsyncSession) -> list[str]:
-    users = await db.scalars(select(User).order_by(func.length(User.username).desc()).limit(5))
+    users = await db.scalars(
+        select(User).order_by(func.length(User.username).desc(), User.username).limit(5)
+    )
     usernames = [user.username for user in users.all()]
     return usernames
 

@@ -18,7 +18,7 @@ async def test_users_statistics(
     response = await async_client.get(f"/users/statistics/?domain={domain}")
     json_response_data = response.json()
     username_list = [user.username for user in create_list_users]
-    sorted_username_list = set(sorted(username_list, key=len, reverse=True)[:5])
+    sorted_username_list = set(sorted(username_list, key=lambda x: (-len(x), x))[:5])
 
     assert response.status_code == 200
     assert json_response_data["count_users_registered_seven_days_ago"] == count_users
