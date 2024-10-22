@@ -37,10 +37,10 @@ mypy:
 	${DC} exec -T ${APP_SERVICE} mypy --explicit-package-bases .
 
 test:
-	pytest . -vs
+	${DC} exec -T ${APP_SERVICE} pytest . -v
 
 test-coverage:
-	pytest --cov=. .
+	${DC} exec -T ${APP_SERVICE} pytest --cov=. .
 
 migrate:
 	alembic upgrade head
