@@ -33,8 +33,17 @@ ruff-check:
 ruff-fix:
 	${DC} exec -T ${APP_SERVICE} ruff check . --fix
 
-tests:
-	${DC} exec -T ${APP_SERVICE} pytest . -vs
+mypy:
+	${DC} exec -T ${APP_SERVICE} mypy --explicit-package-bases .
 
-tests-coverage:
-	${DC} exec ${APP_SERVICE} pytest --cov=. .
+test:
+	pytest . -vs
+
+test-coverage:
+	pytest --cov=. .
+
+migrate:
+	alembic upgrade head
+
+downgrade:
+	alembic downgrade -1

@@ -14,18 +14,31 @@ services:
         - pd_data:/var/lib/postgresql/data
       restart: on-failure
 
+  db_test:
+    image: postgres:17
+    container_name: users_db_test
+    environment:
+      - POSTGRES_DB=${POSTGRES_TEST_DB:-postgres_test}
+      - POSTGRES_USER=${POSTGRES_TEST_USER:-postgres_test}
+      - POSTGRES_PASSWORD=${POSTGRES_TEST_PASSWORD:-postgres_test}
+    ports:
+      - ${POSTGRES_TEST_PORT:-5433}:5432
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: users_api
-    command: uvicorn --host=0.0.0.0 --port=8000 --reload src.main:app
+    command: sh -c "alembic upgrade head && uvicorn --host=0.0.0.0 --port=8000 --reload src.main:app"
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:
       - ./:/code/
     env_file:
       - .env
+    environment:
+        POSTGRES_HOST: db
+        POSTGRES_TEST_HOST: db_test
     restart: always
     depends_on:
       - db
