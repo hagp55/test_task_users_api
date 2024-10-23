@@ -1,6 +1,8 @@
 # Users API
+[![tests](https://github.com/hagp55/test_task_users_api/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/hagp55/test_task_users_api/actions/workflows/tests.yml)
+[![linter-check](https://github.com/hagp55/test_task_users_api/actions/workflows/linter-check.yml/badge.svg?branch=main)](https://github.com/hagp55/test_task_users_api/actions/workflows/linter-check.yml)
 
-Users API is a simple user management API built using FastAPI.
+## Users API is a simple user management API built using FastAPI.
 It provides basic CRUD (Create, Read, Update, Delete) operations for users.
 
 ## Tech Stack
