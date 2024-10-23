@@ -29,17 +29,18 @@ async def get_user_by_id(*, db: AsyncSession, user_id: int) -> User:
     return user
 
 
-async def get_user_by_username(*, db: AsyncSession, username: str) -> None:
+async def check_user_exists(*, db: AsyncSession, username: str, email: str) -> None:
     """
-    Asynchronously checks if a user with the specified username already exists in the database.
+    Asynchronously checks if a user with the given username or email already exists in the database.
 
     Args:
         db (AsyncSession): An asynchronous session for the database.
-        username (str): The username to check.
+        username (str): The username to check for.
+        email (str): The email to check for.
 
     Raises:
-        HTTPException: If a user with the specified username already exists,
-        a 400 Bad Request exception is raised.
+        HTTPException: If a user with the given username or email already exists,
+            a 400 Bad Request exception is raised with an appropriate error message.
     """
     exists_user = await db.scalar(select(User).where(User.username == username))
     if exists_user:
@@ -47,20 +48,6 @@ async def get_user_by_username(*, db: AsyncSession, username: str) -> None:
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"User with username: {username} already exists",
         )
-
-
-async def get_user_by_email(*, db: AsyncSession, email: str) -> None:
-    """
-    Asynchronously checks if a user with the specified email already exists in the database.
-
-    Args:
-        db (AsyncSession): An asynchronous session for the database.
-        email (str): The email to check.
-
-    Raises:
-        HTTPException: If a user with the specified email already exists,
-        a 400 Bad Request exception is raised.
-    """
     exists_user = await db.scalar(select(User).where(User.email == email))
     if exists_user:
         raise HTTPException(
@@ -100,8 +87,7 @@ async def create_user(*, db: AsyncSession, user_in: UserCreate) -> User:
         HTTPException: If a user with the same username or email already exists,
         a 400 Bad Request exception is raised.
     """
-    await get_user_by_username(db=db, username=user_in.username)
-    await get_user_by_email(db=db, email=user_in.email)
+    await check_user_exists(db=db, username=user_in.username, email=user_in.email)
     user = User(username=user_in.username, email=user_in.email)
     db.add(user)
     await db.commit()
@@ -126,8 +112,7 @@ async def update_user(*, db: AsyncSession, user_in: UserUpdate, user_id: int) ->
         a 400 Bad Request exception is raised.
     """
     user = await get_user_by_id(db=db, user_id=user_id)
-    await get_user_by_username(db=db, username=user_in.username)
-    await get_user_by_email(db=db, email=user_in.email)
+    await check_user_exists(db=db, username=user_in.username, email=user_in.email)
     await db.execute(update(User).where(User.id == user_id).values(user_in.model_dump()))
     await db.commit()
     await db.refresh(user)
