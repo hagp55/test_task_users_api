@@ -37,7 +37,7 @@ async def get_user_statistics(
     user_statistics = UserStatistics(
         users_registered_seven_days_ago=await services.count_user_registered_last_seven_days(db=db),
         top_five_users_with_longest_names=await services.top_five_users_with_longest_names(db=db),
-        ratio_of_users_with_specific_domain=await services.ratio_of_users_with_specific_domain(
+        percent_of_users_with_specific_domain=await services.percentage_users_with_specific_domain(
             db=db, domain=domain
         ),
     )

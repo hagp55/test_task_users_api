@@ -70,4 +70,4 @@ class UserStatistics(BaseModel):
         serialization_alias="count_users_registered_seven_days_ago"
     )
     top_five_users_with_longest_names: list[str]
-    ratio_of_users_with_specific_domain: float
+    percent_of_users_with_specific_domain: str
