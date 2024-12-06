@@ -1,6 +1,6 @@
 services:
   db:
-      image: postgres:17
+      image: postgres:17-alpine
       container_name: users_db
       env_file:
         - .env
@@ -15,7 +15,7 @@ services:
       restart: on-failure
 
   db_test:
-    image: postgres:17
+    image: postgres:17-alpine
     container_name: users_db_test
     command: postgres -p 5433
     environment:
